@@ -31,18 +31,24 @@ def main():
             i = clause[0]
             graph[-int(i)].append(int(i))
 
-    ssc_map = kosaraju(graph)
+    ssc = kosaraju(graph)
+    print("Clauses:", clauses)
+    print("Graph:", graph)
+    print('SSC:', ssc)
 
-    for i in range(1, int(no_var) + 1):
-        if ssc_map[i] == ssc_map[-i]:
-            print('UNSATISFIABLE')
-            return False
-    print('SATISFIABLE')
+    for i in ssc:
+        for j in i:
+            if -j in i:
+                print('Unsatisfiable')
+                return False
+    print('Satisfiable')
+
+    generate_values(ssc, int(no_var))
     return True
 
 
 def kosaraju(graph):
-    ssc_map = {}
+    scc_list = []
     visited = {}
     stack = []
 
@@ -63,10 +69,9 @@ def kosaraju(graph):
         if not visited[i]:
             ssc = []
             dfs(reversed_graph, i, visited, ssc)
-            for j in ssc:
-                ssc_map[j] = i
+            scc_list.append(ssc)
 
-    return ssc_map
+    return scc_list
 
 
 def dfs(graph, i, visited, stack):
@@ -87,6 +92,25 @@ def reverse_graph(graph):
             reversed_graph[j].append(i)
 
     return reversed_graph
+
+
+def generate_values(ssc, no_var):
+    values = {}
+    for i in range(1, no_var + 1):
+        values[i] = None
+
+    for i in ssc:
+        for j in i:
+            if -j in i:
+                print('Unsatisfiable')
+                return False
+            if values[abs(j)] is None:
+                values[abs(j)] = 1 if j < 0 else 0
+
+    # print values nicely
+    for i in values.keys():
+        print('Value' + str(i) + ':', values[i])
+    return True
 
 
 if __name__ == '__main__':
