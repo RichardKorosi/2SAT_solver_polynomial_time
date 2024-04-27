@@ -21,6 +21,7 @@ def main():
     for i in range(1, int(no_var) + 1):
         graph[i] = []
         graph[-i] = []
+
     for clause in clauses:
         if len(clause) == 2:
             i, j = clause
@@ -29,7 +30,9 @@ def main():
         elif len(clause) == 1:
             i = clause[0]
             graph[-int(i)].append(int(i))
-    ssc_map = tarjan(graph)
+
+    ssc_map = kosaraju(graph)
+
     for i in range(1, int(no_var) + 1):
         if ssc_map[i] == ssc_map[-i]:
             print('UNSATISFIABLE')
@@ -38,43 +41,52 @@ def main():
     return True
 
 
-def tarjan(graph):
-    index = 1
-    stack = []
+def kosaraju(graph):
     ssc_map = {}
-    low_link = {}
-    index_map = {}
-    for key in graph.keys():
-        ssc_map[key] = 0
-        low_link[key] = 0
-        index_map[key] = 0
+    visited = {}
+    stack = []
 
-    for key in graph.keys():
-        if index_map[key] == 0:
-            index = strong_connect(graph, key, index, stack, ssc_map, low_link, index_map)
+    for i in graph.keys():
+        visited[i] = False
+
+    for i in graph.keys():
+        if not visited[i]:
+            dfs(graph, i, visited, stack)
+
+    reversed_graph = reverse_graph(graph)
+
+    for i in graph.keys():
+        visited[i] = False
+
+    while stack:
+        i = stack.pop()
+        if not visited[i]:
+            ssc = []
+            dfs(reversed_graph, i, visited, ssc)
+            for j in ssc:
+                ssc_map[j] = i
+
     return ssc_map
 
 
-def strong_connect(graph, key, index, stack, ssc_map, low_link, index_map):
-    index_map[key] = index
-    low_link[key] = index
-    index += 1
-    stack.append(key)
+def dfs(graph, i, visited, stack):
+    visited[i] = True
+    for j in graph[i]:
+        if not visited[j]:
+            dfs(graph, j, visited, stack)
+    stack.append(i)
 
-    for neighbor in graph[key]:
-        if index_map[neighbor] == 0:
-            index = strong_connect(graph, neighbor, index, stack, ssc_map, low_link, index_map)
-            low_link[key] = min(low_link[key], low_link[neighbor])
-        elif ssc_map[neighbor] == 0:
-            low_link[key] = min(low_link[key], index_map[neighbor])
 
-    if low_link[key] == index_map[key]:
-        while True:
-            node = stack.pop()
-            ssc_map[node] = low_link[key]
-            if node == key:
-                break
-    return index
+def reverse_graph(graph):
+    reversed_graph = {}
+    for i in graph.keys():
+        reversed_graph[i] = []
+
+    for i in graph.keys():
+        for j in graph[i]:
+            reversed_graph[j].append(i)
+
+    return reversed_graph
 
 
 if __name__ == '__main__':
