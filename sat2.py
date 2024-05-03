@@ -39,9 +39,9 @@ def main():
     for i in ssc:
         for j in i:
             if -j in i:
-                print('Unsatisfiable')
+                print('NESPLNITELNA')
                 return False
-    print('Satisfiable')
+    print('SPLNITELNA')
 
     generate_values(ssc, int(no_var))
     return True
@@ -101,15 +101,12 @@ def generate_values(ssc, no_var):
 
     for i in ssc:
         for j in i:
-            if -j in i:
-                print('Unsatisfiable')
-                return False
             if values[abs(j)] is None:
                 values[abs(j)] = 1 if j < 0 else 0
 
     # print values nicely
     for i in values.keys():
-        print('Value' + str(i) + ':', values[i])
+        print('Value' + str(i) + ':', "PRAVDA" if values[i] == 1 else "NEPRAVDA" if values[i] == 0 else "Nedefinovana")
     return True
 
 
