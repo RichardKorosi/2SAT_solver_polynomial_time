@@ -31,19 +31,19 @@ def main():
             i = clause[0]
             graph[-int(i)].append(int(i))
 
-    ssc = kosaraju(graph)
+    sccs = kosaraju(graph)
     print("Clauses:", clauses)
     print("Graph:", graph)
-    print('SSC:', ssc)
+    print('SSCs:', sccs)
 
-    for i in ssc:
-        for j in i:
-            if -j in i:
+    for scc in sccs:
+        for element in scc:
+            if -element in scc:
                 print('NESPLNITELNA')
                 return False
     print('SPLNITELNA')
 
-    generate_values(ssc, int(no_var))
+    generate_values(sccs, int(no_var))
     return True
 
 
@@ -94,19 +94,18 @@ def reverse_graph(graph):
     return reversed_graph
 
 
-def generate_values(ssc, no_var):
+def generate_values(sccs, no_var):
     values = {}
     for i in range(1, no_var + 1):
         values[i] = None
 
-    for i in ssc:
-        for j in i:
-            if values[abs(j)] is None:
-                values[abs(j)] = 1 if j < 0 else 0
+    for scc in reversed(sccs):
+        for element in scc:
+            if values[abs(element)] is None:
+                values[abs(element)] = True if element > 0 else False
 
-    # print values nicely
     for i in values.keys():
-        print('Value' + str(i) + ':', "PRAVDA" if values[i] == 1 else "NEPRAVDA" if values[i] == 0 else "Nedefinovana")
+        print('Value' + str(i) + ':', "PRAVDA" if values[i] else "NEPRAVDA")
     return True
 
 
