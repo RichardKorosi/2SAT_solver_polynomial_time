@@ -50,9 +50,9 @@ def main():
     for scc in sccs:
         for element in scc:
             if -element in scc:
-                print('NESPLNITELNA')
+                print('NESPLNITEĽNÁ')
                 return False
-    print('SPLNITELNA')
+    print('SPLNITEĽŇÁ')
 
     generate_values(sccs, int(no_var))
     return True
