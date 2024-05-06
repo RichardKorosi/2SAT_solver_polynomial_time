@@ -43,9 +43,9 @@ def main():
             graph[-int(i)].append(int(i))
 
     sccs = kosaraju(graph)
-    print("Clauses:", clauses)
-    print("Graph:", graph)
-    print('SSCs:', sccs)
+    # print("Clauses:", clauses)
+    # print("Graph:", graph)
+    # print('SSCs:', sccs)
 
     for scc in sccs:
         for element in scc:
@@ -116,7 +116,8 @@ def generate_values(sccs, no_var):
                 values[abs(element)] = True if element > 0 else False
 
     for i in values.keys():
-        print('Value' + str(i) + ':', "PRAVDA" if values[i] else "NEPRAVDA")
+        # print('Value' + str(i) + ':', "PRAVDA" if values[i] else "NEPRAVDA")
+        print("PRAVDA" if values[i] else "NEPRAVDA")
     return True
 
 
