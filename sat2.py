@@ -1,3 +1,14 @@
+""""
+Zdroje na algoritmy:
+2SAT: https://www.youtube.com/watch?v=Ku-jJ0G4tIc
+Kosaraju: https://youtu.be/Qdh6-a_2MxE
+
+Vyvýjane za pomoci:
+https://github.com/features/copilot
+https://chatgpt.com/
+"""
+
+
 def read_file(file_name):
     clauses = []
     with open(file_name, 'r') as f:
